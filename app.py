@@ -37,7 +37,7 @@ if uploaded_file:
         ax.axis("equal")
         plt.tight_layout(pad=0.1)
 
-        # Cách 2 (khuyến khích): lưu dpi cao → ảnh sắc nét
+        # Cách 2: lưu dpi cao → ảnh sắc nét
         buf = io.BytesIO()
         fig.savefig(buf, format='png', dpi=300)
         buf.seek(0)
