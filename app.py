@@ -19,3 +19,32 @@ def percentage_distribution(scores):
         elif score >= 60: bins['60-69'] += 1
         else:             bins['<60'] += 1
     return bins
+
+if uploaded_file:
+    df = pd.read_excel(uploaded_file)
+    scores = df["Điểm số"].dropna().astype(float).tolist()
+
+    if scores:
+        st.write("Tổng số học sinh:", len(scores),
+                 "Điểm trung bình:", round(calculate_average(scores), 2))
+
+        dist = percentage_distribution(scores)
+        labels = list(dist.keys())
+        values = list(dist.values())
+
+        fig, ax = plt.subplots(figsize=(1, 1))
+        ax.pie(values, labels=labels, autopct='%1.1f%%', textprops={'fontsize': 3.5})
+        ax.axis("equal")
+        plt.tight_layout(pad=0.1)
+
+        # Cách 2 (khuyến khích): lưu dpi cao → ảnh sắc nét
+        buf = io.BytesIO()
+        fig.savefig(buf, format='png', dpi=300)
+        buf.seek(0)
+        img = Image.open(buf)
+
+        # Căn giữa biểu đồ
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.image(img, width=300)
+            st.markdown("Biểu đồ phân bố điểm số.")
